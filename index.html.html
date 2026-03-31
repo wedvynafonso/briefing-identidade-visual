@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Briefing — Identidade Visual</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1a1814;
+    --ink-mid: #4a4740;
+    --ink-light: #9a9690;
+    --ink-faint: #e8e5e0;
+    --cream: #faf8f4;
+    --cream-warm: #f3f0e8;
+    --accent: #c8a96e;
+    --accent-dark: #a07840;
+    --white: #ffffff;
+    --radius: 6px;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--cream);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--ink);
+    color: var(--cream);
+    padding: 60px 40px 50px;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 300px; height: 300px;
+    border: 1px solid rgba(200,169,110,0.2);
+    border-radius: 50%;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; right: 80px;
+    width: 180px; height: 180px;
+    border: 1px solid rgba(200,169,110,0.12);
+    border-radius: 50%;
+  }
+  .header-inner { max-width: 760px; margin: 0 auto; position: relative; }
+  .header-eyebrow {
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .header-title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--cream);
+    margin-bottom: 20px;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-desc {
+    font-size: 14px;
+    color: rgba(250,248,244,0.6);
+    max-width: 480px;
+    line-height: 1.7;
+  }
+  .header-line {
+    width: 48px; height: 1px;
+    background: var(--accent);
+    margin: 24px 0;
+  }
+
+  /* ── MAIN ── */
+  .main { max-width: 760px; margin: 0 auto; padding: 48px 40px 80px; }
+
+  /* ── SECTION ── */
+  .form-section {
+    margin-bottom: 56px;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+  .form-section:nth-child(1) { animation-delay: 0.05s; }
+  .form-section:nth-child(2) { animation-delay: 0.1s; }
+  .form-section:nth-child(3) { animation-delay: 0.15s; }
+  .form-section:nth-child(4) { animation-delay: 0.2s; }
+  .form-section:nth-child(5) { animation-delay: 0.25s; }
+  .form-section:nth-child(6) { animation-delay: 0.3s; }
+  .form-section:nth-child(7) { animation-delay: 0.35s; }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--ink-faint);
+  }
+  .section-number {
+    font-family: var(--font-display);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .field-grid .full { grid-column: 1 / -1; }
+
+  /* ── FIELD ── */
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--ink-mid);
+    text-transform: uppercase;
+  }
+  .field input[type="text"],
+  .field textarea,
+  .field select {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid var(--ink-faint);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: none;
+    -webkit-appearance: none;
+  }
+  .field input[type="text"]:focus,
+  .field textarea:focus,
+  .field select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(200,169,110,0.12);
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9690' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  .field textarea { min-height: 80px; }
+
+  /* ── TAGS ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag {
+    font-family: var(--font-body);
+    font-size: 12px;
+    padding: 5px 13px;
+    border-radius: 100px;
+    border: 1px solid var(--ink-faint);
+    background: var(--white);
+    color: var(--ink-mid);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.15s;
+    line-height: 1.4;
+  }
+  .tag:hover { border-color: var(--accent); color: var(--ink); }
+  .tag.on {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--cream);
+  }
+
+  /* ── SCALE ── */
+  .scale-wrap { display: flex; flex-direction: column; gap: 6px; }
+  .scale { display: flex; gap: 4px; }
+  .scale-btn {
+    flex: 1;
+    height: 34px;
+    border-radius: var(--radius);
+    border: 1px solid var(--ink-faint);
+    background: var(--white);
+    color: var(--ink-mid);
+    font-size: 12px;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all 0.14s;
+  }
+  .scale-btn:hover { border-color: var(--accent); color: var(--ink); }
+  .scale-btn.on { background: var(--ink); border-color: var(--ink); color: var(--cream); font-weight: 500; }
+  .scale-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--ink-light); }
+
+  /* ── PROGRESS ── */
+  .progress-bar-wrap {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--cream);
+    border-bottom: 1px solid var(--ink-faint);
+    padding: 10px 40px;
+  }
+  .progress-inner { max-width: 760px; margin: 0 auto; display: flex; align-items: center; gap: 14px; }
+  .progress-label { font-size: 11px; color: var(--ink-light); font-weight: 500; white-space: nowrap; }
+  .progress-track {
+    flex: 1; height: 3px;
+    background: var(--ink-faint);
+    border-radius: 100px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 100px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-pct { font-size: 11px; color: var(--ink-light); font-weight: 500; min-width: 30px; text-align: right; }
+
+  /* ── FOOTER / CTA ── */
+  .footer-cta {
+    border-top: 1px solid var(--ink-faint);
+    padding-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  .footer-note { font-size: 13px; color: var(--ink-light); line-height: 1.5; max-width: 360px; }
+  .btn-pdf {
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--cream);
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+  .btn-pdf:hover { background: var(--accent-dark); transform: translateY(-1px); }
+  .btn-pdf:active { transform: translateY(0); }
+  .btn-pdf.loading { opacity: 0.6; pointer-events: none; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    background: var(--ink);
+    color: var(--cream);
+    font-size: 13px;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    border-left: 3px solid var(--accent);
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 600px) {
+    .site-header { padding: 40px 24px 36px; }
+    .main { padding: 32px 24px 60px; }
+    .progress-bar-wrap { padding: 10px 24px; }
+    .field-grid { grid-template-columns: 1fr; }
+    .field-grid .full { grid-column: 1; }
+    .footer-cta { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <p class="header-eyebrow">Formulário de projeto</p>
+    <h1 class="header-title">Briefing de<br><em>Identidade Visual</em></h1>
+    <div class="header-line"></div>
+    <p class="header-desc">Preencha com atenção cada etapa abaixo. Suas respostas são o ponto de partida para o desenvolvimento da identidade da sua marca.</p>
+  </div>
+</header>
+
+<div class="progress-bar-wrap">
+  <div class="progress-inner">
+    <span class="progress-label">Progresso</span>
+    <div class="progress-track"><div class="progress-fill" id="prog"></div></div>
+    <span class="progress-pct" id="prog-pct">0%</span>
+  </div>
+</div>
+
+<main class="main">
+
+  <!-- 01 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">01</span>
+      <h2 class="section-title">Sobre a empresa</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Nome da empresa / marca</label>
+        <input type="text" id="f_nome" placeholder="Ex: Studio Moreau" oninput="updateProgress()" />
+      </div>
+      <div class="field">
+        <label>Segmento / setor de atuação</label>
+        <input type="text" id="f_segmento" placeholder="Ex: Moda, SaaS, Gastronomia..." oninput="updateProgress()" />
+      </div>
+      <div class="field full">
+        <label>Principal produto ou serviço</label>
+        <textarea id="f_produto" placeholder="Descreva brevemente o que a empresa oferece..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field full">
+        <label>Missão ou propósito da marca</label>
+        <textarea id="f_missao" placeholder="O que a empresa acredita / quer transformar?" oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field full">
+        <label>Etapa atual da empresa</label>
+        <div class="tags" id="t_etapa">
+          <span class="tag" onclick="tog(this,'t_etapa')">Pré-lançamento</span>
+          <span class="tag" onclick="tog(this,'t_etapa')">Startup / early stage</span>
+          <span class="tag" onclick="tog(this,'t_etapa')">Em crescimento</span>
+          <span class="tag" onclick="tog(this,'t_etapa')">Madura / reposicionamento</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">02</span>
+      <h2 class="section-title">Público-alvo</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Faixa etária principal</label>
+        <div class="tags" id="t_idade">
+          <span class="tag" onclick="tog(this,'t_idade')">14–24</span>
+          <span class="tag" onclick="tog(this,'t_idade')">25–34</span>
+          <span class="tag" onclick="tog(this,'t_idade')">35–44</span>
+          <span class="tag" onclick="tog(this,'t_idade')">45–60</span>
+          <span class="tag" onclick="tog(this,'t_idade')">60+</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Perfil predominante</label>
+        <div class="tags" id="t_perfil">
+          <span class="tag" onclick="tog(this,'t_perfil')">B2C (consumidor final)</span>
+          <span class="tag" onclick="tog(this,'t_perfil')">B2B (empresas)</span>
+          <span class="tag" onclick="tog(this,'t_perfil')">Ambos</span>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Descreva o cliente ideal (persona)</label>
+        <textarea id="f_persona" placeholder="Comportamentos, dores, aspirações, hábitos de consumo..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field full">
+        <label>Onde esse público vive a marca?</label>
+        <div class="tags" id="t_canais">
+          <span class="tag" onclick="tog(this,'t_canais')">Instagram</span>
+          <span class="tag" onclick="tog(this,'t_canais')">LinkedIn</span>
+          <span class="tag" onclick="tog(this,'t_canais')">TikTok</span>
+          <span class="tag" onclick="tog(this,'t_canais')">Website</span>
+          <span class="tag" onclick="tog(this,'t_canais')">PDV físico</span>
+          <span class="tag" onclick="tog(this,'t_canais')">E-commerce</span>
+          <span class="tag" onclick="tog(this,'t_canais')">App</span>
+          <span class="tag" onclick="tog(this,'t_canais')">YouTube</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">03</span>
+      <h2 class="section-title">Posicionamento & personalidade</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Cite 2–3 concorrentes diretos</label>
+        <input type="text" id="f_concorrentes" placeholder="Ex: Empresa A, Empresa B..." oninput="updateProgress()" />
+      </div>
+      <div class="field">
+        <label>O que diferencia vocês?</label>
+        <textarea id="f_diferencial" placeholder="Proposta de valor única..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field full">
+        <label>Tom de voz da marca</label>
+        <div class="tags" id="t_tom">
+          <span class="tag" onclick="tog(this,'t_tom')">Sério e técnico</span>
+          <span class="tag" onclick="tog(this,'t_tom')">Amigável e próximo</span>
+          <span class="tag" onclick="tog(this,'t_tom')">Inspirador</span>
+          <span class="tag" onclick="tog(this,'t_tom')">Irreverente / humor</span>
+          <span class="tag" onclick="tog(this,'t_tom')">Sofisticado / premium</span>
+          <span class="tag" onclick="tog(this,'t_tom')">Neutro / informativo</span>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Arquétipo de marca</label>
+        <div class="tags" id="t_arquetipos">
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Herói</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Criador</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Cuidador</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Sábio</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Explorador</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Rebelde</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Mágico</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Inocente</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Governante</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Bobo da corte</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Amante</span>
+          <span class="tag" onclick="tog(this,'t_arquetipos')">Homem comum</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">04</span>
+      <h2 class="section-title">Tipografia</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field full">
+        <label>Estilo tipográfico desejado</label>
+        <div class="tags" id="t_tipo">
+          <span class="tag" onclick="tog(this,'t_tipo')">Sem serifa (moderno)</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Com serifa (clássico)</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Script / manuscrito</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Display / expressivo</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Geométrico</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Humanista</span>
+          <span class="tag" onclick="tog(this,'t_tipo')">Monospace</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Peso visual preferido</label>
+        <div class="scale-wrap">
+          <div class="scale" id="s_peso">
+            <button class="scale-btn" onclick="setScale(this,'s_peso')">Light</button>
+            <button class="scale-btn" onclick="setScale(this,'s_peso')">Regular</button>
+            <button class="scale-btn" onclick="setScale(this,'s_peso')">Medium</button>
+            <button class="scale-btn" onclick="setScale(this,'s_peso')">Bold</button>
+            <button class="scale-btn" onclick="setScale(this,'s_peso')">Black</button>
+          </div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Uso no logo</label>
+        <div class="tags" id="t_tipologo">
+          <span class="tag" onclick="tog(this,'t_tipologo')">Só logotipo (texto)</span>
+          <span class="tag" onclick="tog(this,'t_tipologo')">Só símbolo</span>
+          <span class="tag" onclick="tog(this,'t_tipologo')">Símbolo + texto</span>
+          <span class="tag" onclick="tog(this,'t_tipologo')">Monograma</span>
+          <span class="tag" onclick="tog(this,'t_tipologo')">Aberto — explorar</span>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Referências tipográficas que admira</label>
+        <textarea id="f_tiporefs" placeholder="Ex: Vogue, Apple, Spotify, Helvetica, Garamond..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">05</span>
+      <h2 class="section-title">Paleta de cores</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field">
+        <label>Temperatura de cor preferida</label>
+        <div class="tags" id="t_temp">
+          <span class="tag" onclick="tog(this,'t_temp')">Frias (azul, verde, roxo)</span>
+          <span class="tag" onclick="tog(this,'t_temp')">Quentes (vermelho, laranja, amarelo)</span>
+          <span class="tag" onclick="tog(this,'t_temp')">Neutras (cinza, bege)</span>
+          <span class="tag" onclick="tog(this,'t_temp')">Mistas</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Esquema cromático</label>
+        <div class="tags" id="t_esquema">
+          <span class="tag" onclick="tog(this,'t_esquema')">Monocromático</span>
+          <span class="tag" onclick="tog(this,'t_esquema')">Análogo</span>
+          <span class="tag" onclick="tog(this,'t_esquema')">Complementar</span>
+          <span class="tag" onclick="tog(this,'t_esquema')">Triádico</span>
+          <span class="tag" onclick="tog(this,'t_esquema')">Acromático (P&B)</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Saturação e brilho</label>
+        <div class="tags" id="t_sat">
+          <span class="tag" onclick="tog(this,'t_sat')">Cores vivas / vibrantes</span>
+          <span class="tag" onclick="tog(this,'t_sat')">Tons pastel / suaves</span>
+          <span class="tag" onclick="tog(this,'t_sat')">Escuros / profundos</span>
+          <span class="tag" onclick="tog(this,'t_sat')">Dessaturados / terrosos</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Cores a evitar</label>
+        <input type="text" id="f_coresevitar" placeholder="Ex: vermelho, dourado, verde..." oninput="updateProgress()" />
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">06</span>
+      <h2 class="section-title">Estética visual</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field full">
+        <label>Direção estética geral</label>
+        <div class="tags" id="t_estetica">
+          <span class="tag" onclick="tog(this,'t_estetica')">Minimalista</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Maximalista</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Editorial / revista</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Orgânico / natural</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Geométrico / estruturado</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Retrô / vintage</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Futurista / tech</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Handcraft / artesanal</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Luxo / premium</span>
+          <span class="tag" onclick="tog(this,'t_estetica')">Streetwear / urbano</span>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Posição no eixo: Formal ↔ Descontraído</label>
+        <div class="scale-wrap">
+          <div class="scale" id="s_formal">
+            <button class="scale-btn" onclick="setScale(this,'s_formal')">1</button>
+            <button class="scale-btn" onclick="setScale(this,'s_formal')">2</button>
+            <button class="scale-btn" onclick="setScale(this,'s_formal')">3</button>
+            <button class="scale-btn" onclick="setScale(this,'s_formal')">4</button>
+            <button class="scale-btn" onclick="setScale(this,'s_formal')">5</button>
+          </div>
+          <div class="scale-labels"><span>Muito formal</span><span>Muito descontraído</span></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Referências visuais que admira</label>
+        <textarea id="f_refs" placeholder="URLs, marcas, Behance, Pinterest..." oninput="updateProgress()"></textarea>
+      </div>
+      <div class="field">
+        <label>O que a marca definitivamente NÃO pode comunicar</label>
+        <textarea id="f_nao" placeholder="Ex: não pode parecer infantil, barato, genérico..." oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- 07 -->
+  <section class="form-section">
+    <div class="section-header">
+      <span class="section-number">07</span>
+      <h2 class="section-title">Entregáveis & escopo</h2>
+    </div>
+    <div class="field-grid">
+      <div class="field full">
+        <label>O que será desenvolvido neste projeto?</label>
+        <div class="tags" id="t_entregaveis">
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Logotipo principal</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Variações do logo</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Paleta de cores</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Sistema tipográfico</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Manual de marca</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Papelaria</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Templates digitais</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Iconografia</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Motion / animações</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Embalagem</span>
+          <span class="tag" onclick="tog(this,'t_entregaveis')">Sinalização / ambiente</span>
+        </div>
+      </div>
+      <div class="field">
+        <label>Prazo esperado</label>
+        <input type="text" id="f_prazo" placeholder="Ex: 3 semanas, até 15 de maio..." oninput="updateProgress()" />
+      </div>
+      <div class="field">
+        <label>Budget previsto</label>
+        <select id="f_budget" onchange="updateProgress()">
+          <option value="">Selecionar...</option>
+          <option>Até R$ 2.000</option>
+          <option>R$ 2.000 – R$ 5.000</option>
+          <option>R$ 5.000 – R$ 15.000</option>
+          <option>R$ 15.000 – R$ 30.000</option>
+          <option>Acima de R$ 30.000</option>
+          <option>A definir / negociar</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Rodadas de revisão previstas</label>
+        <div class="tags" id="t_revisoes">
+          <span class="tag" onclick="tog(this,'t_revisoes')">1 rodada</span>
+          <span class="tag" onclick="tog(this,'t_revisoes')">2 rodadas</span>
+          <span class="tag" onclick="tog(this,'t_revisoes')">3 rodadas</span>
+          <span class="tag" onclick="tog(this,'t_revisoes')">A definir</span>
+        </div>
+      </div>
+      <div class="field full">
+        <label>Observações finais</label>
+        <textarea id="f_obs" placeholder="Qualquer contexto adicional que ajude a nortear o projeto..." rows="4" oninput="updateProgress()"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <div class="footer-cta">
+    <p class="footer-note">Ao clicar em "Gerar PDF", suas respostas serão compiladas num documento formatado para download.</p>
+    <button class="btn-pdf" onclick="gerarPDF()">Baixar briefing em PDF →</button>
+  </div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── TAG TOGGLE ──
+function tog(el, group) {
+  el.classList.toggle('on');
+  updateProgress();
+}
+
+// ── SCALE ──
+function setScale(el, group) {
+  document.getElementById(group).querySelectorAll('.scale-btn').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  updateProgress();
+}
+
+// ── TAGS VALUE ──
+function tagsVal(id) {
+  const sel = [...document.getElementById(id).querySelectorAll('.tag.on')].map(t => t.textContent);
+  return sel.length ? sel.join(', ') : '—';
+}
+
+// ── SCALE VALUE ──
+function scaleVal(id) {
+  const btn = document.getElementById(id).querySelector('.scale-btn.on');
+  return btn ? btn.textContent : '—';
+}
+
+// ── FIELD VALUE ──
+function fv(id) { const el = document.getElementById(id); return el ? (el.value.trim() || '—') : '—'; }
+
+// ── PROGRESS ──
+function updateProgress() {
+  const fields = ['f_nome','f_segmento','f_produto','f_missao','f_persona','f_concorrentes','f_diferencial','f_prazo'];
+  const tags = ['t_etapa','t_idade','t_perfil','t_canais','t_tom','t_tipo','t_tipologo','t_temp','t_estetica','t_entregaveis'];
+  let filled = 0, total = fields.length + tags.length;
+  fields.forEach(id => { const el = document.getElementById(id); if (el && el.value.trim()) filled++; });
+  tags.forEach(id => { const el = document.getElementById(id); if (el && el.querySelector('.tag.on')) filled++; });
+  const pct = Math.round((filled / total) * 100);
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('prog-pct').textContent = pct + '%';
+}
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ── PDF GENERATION ──
+function gerarPDF() {
+  const btn = document.querySelector('.btn-pdf');
+  btn.classList.add('loading');
+  btn.textContent = 'Gerando...';
+
+  setTimeout(() => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+
+      const pageW = 210, pageH = 297;
+      const ml = 20, mr = 20, mt = 20;
+      const contentW = pageW - ml - mr;
+      let y = mt;
+
+      const INK = [26, 24, 20];
+      const ACCENT = [200, 169, 110];
+      const LIGHT = [154, 150, 144];
+      const FAINT = [232, 229, 224];
+      const CREAM = [250, 248, 244];
+
+      function checkPage(needed = 10) {
+        if (y + needed > pageH - 20) { doc.addPage(); y = mt; }
+      }
+
+      function drawHeader() {
+        doc.setFillColor(...INK);
+        doc.rect(0, 0, pageW, 48, 'F');
+        doc.setFillColor(...ACCENT);
+        doc.rect(0, 48, pageW, 1, 'F');
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(22);
+        doc.setTextColor(250, 248, 244);
+        doc.text('Briefing — Identidade Visual', ml, 28);
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...ACCENT);
+        doc.text('FORMULÁRIO DE PROJETO', ml, 38);
+
+        const date = new Date().toLocaleDateString('pt-BR', { day:'2-digit', month:'long', year:'numeric' });
+        doc.setTextColor(154, 150, 144);
+        doc.text(date, pageW - mr, 38, { align: 'right' });
+        y = 60;
+      }
+
+      function sectionTitle(num, title) {
+        checkPage(16);
+        doc.setFillColor(...FAINT);
+        doc.rect(ml, y, contentW, 8, 'F');
+        doc.setFillColor(...ACCENT);
+        doc.rect(ml, y, 3, 8, 'F');
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8);
+        doc.setTextColor(...ACCENT);
+        doc.text(num, ml + 6, y + 5.5);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.setTextColor(...INK);
+        doc.text(title, ml + 20, y + 5.5);
+
+        y += 12;
+      }
+
+      function field(label, value) {
+        if (!value || value === '—') return;
+        const lines = doc.splitTextToSize(value, contentW - 30);
+        const blockH = 6 + lines.length * 4.5 + 6;
+        checkPage(blockH + 4);
+
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(7.5);
+        doc.setTextColor(...LIGHT);
+        doc.text(label.toUpperCase(), ml, y);
+        y += 4.5;
+
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(9);
+        doc.setTextColor(...INK);
+        lines.forEach(line => { doc.text(line, ml, y); y += 4.5; });
+        y += 5;
+      }
+
+      // ── BUILD ──
+      drawHeader();
+
+      sectionTitle('01', 'Sobre a empresa');
+      field('Nome da empresa / marca', fv('f_nome'));
+      field('Segmento', fv('f_segmento'));
+      field('Principal produto ou serviço', fv('f_produto'));
+      field('Missão ou propósito', fv('f_missao'));
+      field('Etapa atual', tagsVal('t_etapa'));
+
+      sectionTitle('02', 'Público-alvo');
+      field('Faixa etária', tagsVal('t_idade'));
+      field('Perfil predominante', tagsVal('t_perfil'));
+      field('Cliente ideal (persona)', fv('f_persona'));
+      field('Canais de presença', tagsVal('t_canais'));
+
+      sectionTitle('03', 'Posicionamento & personalidade');
+      field('Concorrentes diretos', fv('f_concorrentes'));
+      field('Diferencial', fv('f_diferencial'));
+      field('Tom de voz', tagsVal('t_tom'));
+      field('Arquétipo de marca', tagsVal('t_arquetipos'));
+
+      sectionTitle('04', 'Tipografia');
+      field('Estilo tipográfico', tagsVal('t_tipo'));
+      field('Peso visual', scaleVal('s_peso'));
+      field('Uso no logo', tagsVal('t_tipologo'));
+      field('Referências tipográficas', fv('f_tiporefs'));
+
+      sectionTitle('05', 'Paleta de cores');
+      field('Temperatura de cor', tagsVal('t_temp'));
+      field('Esquema cromático', tagsVal('t_esquema'));
+      field('Saturação e brilho', tagsVal('t_sat'));
+      field('Cores a evitar', fv('f_coresevitar'));
+
+      sectionTitle('06', 'Estética visual');
+      field('Direção estética', tagsVal('t_estetica'));
+      field('Eixo formal ↔ descontraído', scaleVal('s_formal'));
+      field('Referências visuais', fv('f_refs'));
+      field('O que não pode comunicar', fv('f_nao'));
+
+      sectionTitle('07', 'Entregáveis & escopo');
+      field('Entregáveis do projeto', tagsVal('t_entregaveis'));
+      field('Prazo esperado', fv('f_prazo'));
+      field('Budget previsto', fv('f_budget'));
+      field('Rodadas de revisão', tagsVal('t_revisoes'));
+      field('Observações finais', fv('f_obs'));
+
+      // footer on each page
+      const totalPages = doc.internal.getNumberOfPages();
+      for (let i = 1; i <= totalPages; i++) {
+        doc.setPage(i);
+        doc.setFillColor(...FAINT);
+        doc.rect(0, pageH - 12, pageW, 12, 'F');
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7);
+        doc.setTextColor(...LIGHT);
+        doc.text('Briefing — Identidade Visual', ml, pageH - 5);
+        doc.text(`${i} / ${totalPages}`, pageW - mr, pageH - 5, { align: 'right' });
+      }
+
+      const nome = fv('f_nome').replace(/[^a-zA-Z0-9\s]/g, '').trim().replace(/\s+/g, '-').toLowerCase();
+      const filename = nome && nome !== '' ? `briefing-${nome}.pdf` : 'briefing-identidade-visual.pdf';
+      doc.save(filename);
+      showToast('PDF gerado com sucesso!');
+    } catch(e) {
+      console.error(e);
+      showToast('Erro ao gerar PDF. Tente novamente.');
+    }
+
+    btn.classList.remove('loading');
+    btn.textContent = 'Baixar briefing em PDF →';
+  }, 100);
+}
+</script>
+</body>
+</html>
